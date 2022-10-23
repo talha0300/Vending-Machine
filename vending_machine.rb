@@ -2,8 +2,10 @@
 
 # Prices are stored in Pennies
 ITEMS =  {"Item_1" => {"title": "Soft Drink", "price": 50},  
-    "Item_2" =>  {"title": "Potatao Chips",  "price": 80},
-    "Item_3" =>  {"title": "Choclate",  "price": 120}}
+    "Item_2" =>  {"title": "Potatao Chips Pack",  "price": 80},
+    "Item_3" =>  {"title": "Choclate Bar",  "price": 120},
+    "Item_4" =>  {"title": "Candy Bar",  "price": 75},
+    "Item_5" =>  {"title": "Juice Pack",  "price": 45}}
 # coins and thier values in pennies
 COINS = {"2£": 200, "1£": 100, "50p": 50, "20p": 20, "10p": 10, "5p": 5, "2p": 2,"1p": 1}
 
@@ -42,20 +44,28 @@ class VendingMachine
         ITEMS.values.each_with_index do |item, index|
             print "#{index + 1}:  #{item[:title]}  #{CurrencyHandler.pennies_to_pounds(item[:price])} \n"
         end
-        print "enter the number to buy an item e.g 1 to buy first item:  "
-        item = gets.chomp
-        ITEMS["Item_" + item] # return selected item
+        item = nil
+        while !item
+            print "please enter the number to buy an item e.g 1 to buy first item:  "
+            item = gets.chomp #user input
+            item = ITEMS["Item_" + item] # return selected item
+            print "Invalid input\n" unless item
+        end
+        item
     end
 
     def self.make_a_purchase(selected_item)
-        # print "please enter money and we only accept coins(1p, 2p, 5p, 10p, 20p, 50p, 1£, 2£): "
-        # inserted_amount = COINS[gets.chomp.to_sym]
         inserted_amount = 0
 
         while inserted_amount < selected_item[:price] do 
             pending_amount = CurrencyHandler.pennies_to_pounds(selected_item[:price] - inserted_amount)
-            print "please insert #{pending_amount} and we only accept coins(1p, 2p, 5p, 10p, 20p, 50p, 1£, 2£): "
-            inserted_amount += COINS[gets.chomp.to_sym]
+            print "please pay #{pending_amount} and we only accept coins(1p, 2p, 5p, 10p, 20p, 50p, 1£, 2£): "
+            entered_amount = COINS[gets.chomp.to_sym] #user input
+            if entered_amount
+                inserted_amount += entered_amount
+            else
+                print "Invalid input\n"
+            end
         end
 
         amount_return = inserted_amount - selected_item[:price]
