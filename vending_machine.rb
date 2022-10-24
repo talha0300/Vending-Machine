@@ -1,40 +1,5 @@
-
-
-# Prices are stored in Pennies
-ITEMS =  {"Item_1" => {"title": "Soft Drink", "price": 50},  
-    "Item_2" =>  {"title": "Potatao Chips Pack",  "price": 80},
-    "Item_3" =>  {"title": "Choclate Bar",  "price": 120},
-    "Item_4" =>  {"title": "Candy Bar",  "price": 75},
-    "Item_5" =>  {"title": "Juice Pack",  "price": 45}}
-# coins and thier values in pennies
-COINS = {"2£": 200, "1£": 100, "50p": 50, "20p": 20, "10p": 10, "5p": 5, "2p": 2,"1p": 1}
-
-class CurrencyHandler
-    # This function change any given amount to collection of coins like 35 to (20p, 10p, 5p)
-    # This function is used to give back exta amount to customer like customer pays 2£ for an item 
-    # and item price is 1£ and 30p 
-    def self.coins_return(amount_to_return)
-        coins = []
-        COINS.each do |coin, value|
-            if amount_to_return > 0
-                coin_count = amount_to_return/value
-                if coin_count > 0
-                    coins += [coin.to_s] * coin_count # insert coins to the list like 2 coins of 2p or 3 coins of 1£
-                    amount_to_return -= value * coin_count 
-                end
-            else
-                break
-            end
-        end
-        coins
-    end
-
-    # convert pennies to pound for display
-    def self.pennies_to_pounds(pennies)
-        "£" + ("%.2f" % (pennies/100.0)) # two decimal points precision
-    end
-
-end
+require_relative 'data'
+require_relative 'currency_handler'
 
 class VendingMachine
     # display items and ask customer to select the item and return the selected item
@@ -82,8 +47,5 @@ class VendingMachine
     end
 
 end
-
-## Start the Machine
-VendingMachine.start
 
 
